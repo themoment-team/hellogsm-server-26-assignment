@@ -1,6 +1,8 @@
 spring:
   application:
-    name: product-service
+    name: hellogsm-server-26-assignment
+    version: 2026.0.0
+    group: team.themoment.hellogsmassignment
   main:
     allow-circular-references: true
   jpa:
