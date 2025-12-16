@@ -49,30 +49,22 @@ public class OrderService {
     @Transactional(readOnly = true)
     public SearchOrdersResDto searchOrders(
             OrderStatus status, BigDecimal minPrice, BigDecimal maxPrice,
-            LocalDate startDate, LocalDate endDate, Pageable pageable
+            LocalDateTime startDate, LocalDateTime endDate, Pageable pageable
     ) {
-        Page<Order> orders = orderRepository.searchOrders(status, minPrice, maxPrice, startDate != null ? startDate.atStartOfDay() : null, endDate != null ? endDate.atStartOfDay() : null, pageable);
-        int count = orderRepository.countSearchOrder(status, minPrice, maxPrice, startDate != null ? startDate.atStartOfDay() : null, endDate != null ? endDate.atStartOfDay() : null);
+        Page<SearchOrderResDto> page =
+                orderRepository.searchOrders(
+                        status, minPrice, maxPrice,
+                        startDate, endDate, pageable
+                );
 
-        SearchOrderInfoDto searchOrderInfoDto = SearchOrderInfoDto.builder()
-                .totalPages(orders.getTotalPages())
-                .totalElements(count)
+        SearchOrderInfoDto info = SearchOrderInfoDto.builder()
+                .totalPages(page.getTotalPages())
+                .totalElements((int) page.getTotalElements())
                 .build();
 
-        List<SearchOrderResDto> searchOrderResDtos = orders.getContent().stream()
-                .map(order -> SearchOrderResDto.builder()
-                        .orderId(order.getId())
-                        .memberName(order.getMember().getName())
-                        .totalPrice(order.getTotalPrice())
-                        .status(order.getStatus())
-                        .createdTime(order.getCreatedTime())
-                        .productCount(order.getOrderItems().size())
-                        .build())
-                .toList();
-
         return SearchOrdersResDto.builder()
-                .info(searchOrderInfoDto)
-                .orders(searchOrderResDtos)
+                .info(info)
+                .orders(page.getContent())
                 .build();
     }
 
