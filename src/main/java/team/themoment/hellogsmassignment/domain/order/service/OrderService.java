@@ -12,7 +12,6 @@ import team.themoment.hellogsmassignment.domain.order.repo.OrderRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,7 +22,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public QueryOrderResDto queryOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
+        Order order = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
         List<OrderItemDto> orderItemDtos = order.getOrderItems().stream()
@@ -51,12 +50,12 @@ public class OrderService {
             OrderStatus status, BigDecimal minPrice, BigDecimal maxPrice,
             LocalDate startDate, LocalDate endDate, Pageable pageable
     ) {
-        Page<Order> orders = orderRepository.searchOrders(status, minPrice, maxPrice, startDate != null ? startDate.atStartOfDay() : null, endDate != null ? endDate.atStartOfDay() : null, pageable);
-        int count = orderRepository.countSearchOrder(status, minPrice, maxPrice, startDate != null ? startDate.atStartOfDay() : null, endDate != null ? endDate.atStartOfDay() : null);
+        Page<Order> orders = orderRepository.searchOrders(
+                status, minPrice, maxPrice, startDate, endDate, pageable);
 
         SearchOrderInfoDto searchOrderInfoDto = SearchOrderInfoDto.builder()
                 .totalPages(orders.getTotalPages())
-                .totalElements(count)
+                .totalElements((int) orders.getTotalElements())
                 .build();
 
         List<SearchOrderResDto> searchOrderResDtos = orders.getContent().stream()
