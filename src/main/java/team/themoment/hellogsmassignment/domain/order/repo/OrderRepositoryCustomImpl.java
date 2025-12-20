@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import team.themoment.hellogsmassignment.domain.member.entity.QMember;
+import static team.themoment.hellogsmassignment.domain.member.entity.QMember.member;
 import team.themoment.hellogsmassignment.domain.order.dto.response.SearchOrderResDto;
+import static team.themoment.hellogsmassignment.domain.order.entity.QOrder.order;
+import static team.themoment.hellogsmassignment.domain.order.entity.QOrderItem.orderItem;
+
 import team.themoment.hellogsmassignment.domain.order.entity.QOrder;
-import team.themoment.hellogsmassignment.domain.order.entity.QOrderItem;
 import team.themoment.hellogsmassignment.domain.order.entity.type.OrderStatus;
 
 import java.math.BigDecimal;
@@ -21,9 +23,6 @@ import java.util.List;
 public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
-    private final QOrder order = QOrder.order;
-    private final QMember member = QMember.member;
-    private final QOrderItem orderItem = QOrderItem.orderItem;
 
     @Override
     public Page<SearchOrderResDto> searchOrders(
