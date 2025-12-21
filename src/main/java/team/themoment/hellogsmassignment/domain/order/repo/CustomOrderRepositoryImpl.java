@@ -12,6 +12,7 @@ import team.themoment.hellogsmassignment.domain.order.entity.type.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,6 +105,6 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
     }
 
     private BooleanExpression endDateLoe(LocalDate endDate) {
-        return endDate != null ? order.createdTime.loe(endDate.atTime(23, 59, 59)) : null;
+        return endDate != null ? order.createdTime.loe(endDate.atTime(LocalTime.MAX)) : null;
     }
 }
