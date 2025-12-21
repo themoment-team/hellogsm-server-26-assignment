@@ -57,18 +57,6 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        if (orderIds.isEmpty()) {
-            return new PageImpl<>(List.of(), pageable, 0);
-        }
-
-        List<Order> content = queryFactory
-                .selectFrom(order)
-                .leftJoin(order.orderItems).fetchJoin()
-                .leftJoin(order.member).fetchJoin()
-                .where(order.id.in(orderIds))
-                .orderBy(order.createdTime.desc(), order.id.desc())
-                .distinct().fetch();
-
         Long total = queryFactory
                 .select(order.count())
                 .from(order)
@@ -82,6 +70,18 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
                 .fetchOne();
 
         long totalCount = total != null ? total : 0L;
+
+        if (orderIds.isEmpty()) {
+            return new PageImpl<>(List.of(), pageable, totalCount);
+        }
+
+        List<Order> content = queryFactory
+                .selectFrom(order)
+                .leftJoin(order.orderItems).fetchJoin()
+                .leftJoin(order.member).fetchJoin()
+                .where(order.id.in(orderIds))
+                .orderBy(order.createdTime.desc(), order.id.desc())
+                .distinct().fetch();
 
         return new PageImpl<>(content, pageable, totalCount);
     }
