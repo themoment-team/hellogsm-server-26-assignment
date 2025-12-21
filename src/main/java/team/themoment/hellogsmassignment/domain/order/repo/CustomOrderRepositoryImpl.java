@@ -76,12 +76,13 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
         }
 
         List<Order> content = queryFactory
-                .selectFrom(order)
+                .select(order).distinct()
+                .from(order)
                 .leftJoin(order.orderItems).fetchJoin()
                 .leftJoin(order.member).fetchJoin()
                 .where(order.id.in(orderIds))
                 .orderBy(order.createdTime.desc(), order.id.desc())
-                .distinct().fetch();
+                .fetch();
 
         return new PageImpl<>(content, pageable, totalCount);
     }
