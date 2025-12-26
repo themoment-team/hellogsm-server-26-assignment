@@ -58,10 +58,10 @@ public class Member {
     private LocalDateTime updatedTime;
 
     public void updateMember(UpdateMemberReqDto reqDto) {
-        this.email = reqDto.getEmail();
-        this.name = reqDto.getName();
-        this.birth = reqDto.getBirth();
-        this.phoneNumber = reqDto.getPhoneNumber();
+        this.email = reqDto.email();
+        this.name = reqDto.name();
+        this.birth = reqDto.birth();
+        this.phoneNumber = reqDto.phoneNumber();
     }
 
 }

@@ -16,12 +16,12 @@ public class UpdateMemberService {
     @Transactional
     public void execute(Long memberId, UpdateMemberReqDto reqDto) {
 
-        boolean isDuplicateEmail = memberRepository.existsByEmail(reqDto.getEmail());
+        boolean isDuplicateEmail = memberRepository.existsByEmail(reqDto.email());
         if (isDuplicateEmail) {
             throw new RuntimeException();
         }
 
-        boolean isDuplicatePhoneNumber = memberRepository.existsByPhoneNumber(reqDto.getPhoneNumber());
+        boolean isDuplicatePhoneNumber = memberRepository.existsByPhoneNumber(reqDto.phoneNumber());
         if (isDuplicatePhoneNumber) {
             throw new RuntimeException();
         }
