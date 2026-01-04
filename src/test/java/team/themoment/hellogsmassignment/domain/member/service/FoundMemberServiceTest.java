@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Member 조회 Service 클래스의")
+@DisplayName("FoundMemberService 클래스의")
 public class FoundMemberServiceTest {
     @InjectMocks
     private FoundMemberService foundMemberService;

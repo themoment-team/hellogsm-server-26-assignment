@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Member 생성 Service 클래스의")
+@DisplayName("CreateMemberService 클래스의")
 public class CreateMemberServiceTest {
     @InjectMocks
     private CreateMemberService createMemberService;

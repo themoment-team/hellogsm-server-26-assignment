@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Member 업데이트 Service 클래스의")
+@DisplayName("UpdateMemberService 클래스의")
 public class UpdateMemberServiceTest {
     @InjectMocks
     private UpdateMemberService updateMemberService;
