@@ -1,4 +1,4 @@
-package team.themoment.hellogsmassignment.domain.member;
+package team.themoment.hellogsmassignment.domain.member.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +12,6 @@ import team.themoment.hellogsmassignment.domain.member.dto.response.FoundMemberR
 import team.themoment.hellogsmassignment.domain.member.entity.Member;
 import team.themoment.hellogsmassignment.domain.member.entity.type.AuthReferrerType;
 import team.themoment.hellogsmassignment.domain.member.repo.MemberRepository;
-import team.themoment.hellogsmassignment.domain.member.service.FoundMemberService;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
