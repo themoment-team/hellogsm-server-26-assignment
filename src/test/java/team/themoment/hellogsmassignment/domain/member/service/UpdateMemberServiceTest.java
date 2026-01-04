@@ -48,7 +48,7 @@ public class UpdateMemberServiceTest {
                         LocalDate.of(2000, 1, 1)
                 );
 
-                Optional<Member> existMember = Optional.ofNullable(
+                Optional<Member> existMember = Optional.of(
                         Member.builder()
                                 .id(1L)
                                 .email("test@example.com")
