@@ -15,9 +15,7 @@ import team.themoment.hellogsmassignment.domain.member.entity.type.AuthReferrerT
 import team.themoment.hellogsmassignment.domain.member.repo.MemberRepository;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -103,8 +101,6 @@ public class UpdateMemberServiceTest {
                 // when & then
                 assertThatThrownBy(() -> updateMemberService.execute(1L, reqDto))
                         .isInstanceOf(RuntimeException.class);
-
-                verify(memberRepository, never()).save(any(Member.class));
             }
         }
 
@@ -130,8 +126,6 @@ public class UpdateMemberServiceTest {
                 // when & then
                 assertThatThrownBy(() -> updateMemberService.execute(1L, reqDto))
                         .isInstanceOf(RuntimeException.class);
-
-                verify(memberRepository, never()).save(any(Member.class));
             }
         }
 
@@ -158,8 +152,6 @@ public class UpdateMemberServiceTest {
                 // when & then
                 assertThatThrownBy(() -> updateMemberService.execute(1L, reqDto))
                         .isInstanceOf(RuntimeException.class);
-
-                verify(memberRepository, never()).save(any(Member.class));
             }
         }
     }

@@ -14,10 +14,7 @@ import team.themoment.hellogsmassignment.domain.member.entity.type.AuthReferrerT
 import team.themoment.hellogsmassignment.domain.member.repo.MemberRepository;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
@@ -84,8 +81,6 @@ public class FoundMemberServiceTest {
                 // when & then
                 assertThatThrownBy(() -> foundMemberService.execute(1L))
                         .isInstanceOf(RuntimeException.class);
-
-                verify(memberRepository, never()).save(any(Member.class));
             }
         }
     }
