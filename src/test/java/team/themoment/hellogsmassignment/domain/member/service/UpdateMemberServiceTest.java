@@ -16,14 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class Member_업데이트_Service_클래스의 {
+@DisplayName("UpdateMemberService 클래스의")
+class UpdateMemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
 
     @InjectMocks
     private UpdateMemberService updateMemberService;
+
+    private Long memberId;
+    private Member member;
+    private UpdateMemberReqDto reqDto;
 
     private Member createMember(Long id) {
         return Member.builder()
@@ -44,19 +48,22 @@ class Member_업데이트_Service_클래스의 {
         );
     }
 
+    @BeforeEach
+    void setUp() {
+        reqDto = createUpdateDto();
+    }
+
     @Nested
     class execute_메서드는 {
 
         @Nested
-        class Member_업데이트_DTO가_주어졌을_때 {
+        @DisplayName("Member 업데이트 DTO가 주어졌을 때")
+        class when_update_member_dto_is_given {
 
-            @Test
-            @DisplayName("DTO 정보에 따라 Member 정보를 업데이트하고 저장한다")
-            void updateMember_success() {
-                // given
-                Long memberId = 1L;
-                Member member = createMember(memberId);
-                UpdateMemberReqDto reqDto = createUpdateDto();
+            @BeforeEach
+            void setUp() {
+                memberId = 1L;
+                member = createMember(memberId);
 
                 when(memberRepository.existsByEmail(reqDto.getEmail()))
                         .thenReturn(false);
@@ -64,7 +71,11 @@ class Member_업데이트_Service_클래스의 {
                         .thenReturn(false);
                 when(memberRepository.findById(memberId))
                         .thenReturn(Optional.of(member));
+            }
 
+            @Test
+            @DisplayName("DTO 정보에 따라 Member 정보를 업데이트하고 저장한다")
+            void update_member_success() {
                 // when
                 updateMemberService.execute(memberId, reqDto);
 
@@ -83,14 +94,12 @@ class Member_업데이트_Service_클래스의 {
         }
 
         @Nested
-        class 존재하지_않는_Member_ID가_주어졌을_때 {
+        @DisplayName("존재하지 않는 Member ID가 주어졌을 때")
+        class when_member_id_does_not_exist {
 
-            @Test
-            @DisplayName("Member ID를 찾을 수 없다는 예외를 던진다")
-            void updateMember_fail_whenMemberNotFound() {
-                // given
-                Long memberId = 999L;
-                UpdateMemberReqDto reqDto = createUpdateDto();
+            @BeforeEach
+            void setUp() {
+                memberId = 999L;
 
                 when(memberRepository.existsByEmail(reqDto.getEmail()))
                         .thenReturn(false);
@@ -98,7 +107,11 @@ class Member_업데이트_Service_클래스의 {
                         .thenReturn(false);
                 when(memberRepository.findById(memberId))
                         .thenReturn(Optional.empty());
+            }
 
+            @Test
+            @DisplayName("Member ID를 찾을 수 없다는 예외를 던진다")
+            void update_member_fail_when_member_not_found() {
                 // when & then
                 assertThrows(RuntimeException.class,
                         () -> updateMemberService.execute(memberId, reqDto));
@@ -109,18 +122,20 @@ class Member_업데이트_Service_클래스의 {
         }
 
         @Nested
-        class 중복된_Email이_주어졌을_때 {
+        @DisplayName("중복된 Email이 주어졌을 때")
+        class when_duplicate_email_is_given {
 
-            @Test
-            @DisplayName("Email 중복 예외를 던진다")
-            void updateMember_fail_whenEmailDuplicated() {
-                // given
-                Long memberId = 1L;
-                UpdateMemberReqDto reqDto = createUpdateDto();
+            @BeforeEach
+            void setUp() {
+                memberId = 1L;
 
                 when(memberRepository.existsByEmail(reqDto.getEmail()))
                         .thenReturn(true);
+            }
 
+            @Test
+            @DisplayName("Email 중복 예외를 던진다")
+            void update_member_fail_when_email_duplicated() {
                 // when & then
                 assertThrows(RuntimeException.class,
                         () -> updateMemberService.execute(memberId, reqDto));
@@ -133,20 +148,22 @@ class Member_업데이트_Service_클래스의 {
         }
 
         @Nested
-        class 중복된_PhoneNumber가_주어졌을_때 {
+        @DisplayName("중복된 PhoneNumber가 주어졌을 때")
+        class when_duplicate_phone_number_is_given {
 
-            @Test
-            @DisplayName("PhoneNumber 중복 예외를 던진다")
-            void updateMember_fail_whenPhoneNumberDuplicated() {
-                // given
-                Long memberId = 1L;
-                UpdateMemberReqDto reqDto = createUpdateDto();
+            @BeforeEach
+            void setUp() {
+                memberId = 1L;
 
                 when(memberRepository.existsByEmail(reqDto.getEmail()))
                         .thenReturn(false);
                 when(memberRepository.existsByPhoneNumber(reqDto.getPhoneNumber()))
                         .thenReturn(true);
+            }
 
+            @Test
+            @DisplayName("PhoneNumber 중복 예외를 던진다")
+            void update_member_fail_when_phone_number_duplicated() {
                 // when & then
                 assertThrows(RuntimeException.class,
                         () -> updateMemberService.execute(memberId, reqDto));

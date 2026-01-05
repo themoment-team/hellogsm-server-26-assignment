@@ -17,16 +17,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class Member_생성_Service_클래스의 {
+@DisplayName("CreateMemberService 클래스의")
+class CreateMemberServiceTest {
+
     @Mock
     private MemberRepository memberRepository;
 
     @InjectMocks
     private CreateMemberService createMemberService;
 
-    CreateMemberReqDto reqDto(){
-        return new CreateMemberReqDto(
+    private CreateMemberReqDto reqDto;
+
+    @BeforeEach
+    void setUp() {
+        reqDto = new CreateMemberReqDto(
                 "홍길동",
                 "test@test.com",
                 "01012345678",
@@ -34,24 +38,24 @@ class Member_생성_Service_클래스의 {
         );
     }
 
-    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     @Nested
     class execute_메서드는 {
 
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         @Nested
-        class Member_생성_DTO_객체가_주어졌을_때 {
-            @Test
-            @DisplayName("DTO 객체의 정보에 따라 Member를 생성하여 save 한다.")
-            void it_saves_member_according_to_dto(){
-                // given
-                CreateMemberReqDto reqDto = reqDto();
+        @DisplayName("CreateMemberDTO 객체가 주어졌을 때")
+        class when_create_member_dto_is_given {
 
+            @BeforeEach
+            void setUp() {
                 when(memberRepository.existsByEmail(reqDto.getEmail()))
                         .thenReturn(false);
                 when(memberRepository.existsByPhoneNumber(reqDto.getPhoneNumber()))
                         .thenReturn(false);
+            }
 
+            @Test
+            @DisplayName("DTO 객체의 정보에 따라 Member를 생성하여 save 한다.")
+            void it_saves_member_according_to_dto() {
                 // when
                 createMemberService.execute(reqDto);
 
@@ -62,48 +66,48 @@ class Member_생성_Service_클래스의 {
             }
         }
 
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         @Nested
-        class 중복된_Email이_주어졌을_때 {
+        @DisplayName("중복된 Email이 주어졌을 때")
+        class when_duplicate_email_is_given {
+
+            @BeforeEach
+            void setUp() {
+                when(memberRepository.existsByEmail(reqDto.getEmail()))
+                        .thenReturn(true);
+            }
+
             @Test
             @DisplayName("Email 중복 예외를 던진다")
             void it_throws_exception_when_email_is_duplicated() {
-                // given
-                CreateMemberReqDto reqDto = reqDto();
-
-                when(memberRepository.existsByEmail(reqDto.getEmail()))
-                        .thenReturn(true);
-
                 // when & then
                 assertThrows(RuntimeException.class,
                         () -> createMemberService.execute(reqDto));
+
                 verify(memberRepository, never()).save(any());
             }
         }
 
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         @Nested
-        class 중복된_PhoneNumber가_주어졌을_때 {
-            @Test
-            @DisplayName(" PhoneNumber 중복 예외를 던진다.")
-            void it_throws_exception_when_phone_number_is_duplicated() {
-                // given
-                CreateMemberReqDto reqDto = reqDto();
+        @DisplayName("중복된 PhoneNumber가 주어졌을 때")
+        class when_duplicate_phone_number_is_given {
 
+            @BeforeEach
+            void setUp() {
                 when(memberRepository.existsByEmail(reqDto.getEmail()))
                         .thenReturn(false);
                 when(memberRepository.existsByPhoneNumber(reqDto.getPhoneNumber()))
                         .thenReturn(true);
+            }
 
+            @Test
+            @DisplayName(" PhoneNumber 중복 예외를 던진다.")
+            void it_throws_exception_when_phone_number_is_duplicated() {
                 // when & then
                 assertThrows(RuntimeException.class,
                         () -> createMemberService.execute(reqDto));
+
                 verify(memberRepository, never()).save(any());
             }
         }
-
-
-
     }
-
 }
