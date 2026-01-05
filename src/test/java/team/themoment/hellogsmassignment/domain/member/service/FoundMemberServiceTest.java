@@ -19,13 +19,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class Member_조회_Service_클래스의 {
+@DisplayName("FoundMemberService 클래스의")
+class FoundMemberServiceTest {
+
     @Mock
     private MemberRepository memberRepository;
 
     @InjectMocks
     private FoundMemberService foundMemberService;
+
+    private Long memberId;
+    private Member member;
 
     private Member createMember(Long id) {
         return Member.builder()
@@ -36,24 +40,26 @@ class Member_조회_Service_클래스의 {
                 .phoneNumber("01012345678")
                 .build();
     }
-    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+
     @Nested
     class execute_메서드는 {
 
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         @Nested
-        class Member_ID가_주어졌을_때 {
+        @DisplayName("Member ID가 주어졌을 때")
+        class when_member_id_is_given {
 
-            @Test
-            @DisplayName("Member를 조회하여 적절한 ResDTO를 반환한다")
-            void findMember_success() {
-                // given
-                Long memberId = 1L;
-                Member member = createMember(memberId);
+            @BeforeEach
+            void setUp() {
+                memberId = 1L;
+                member = createMember(memberId);
 
                 when(memberRepository.findById(memberId))
                         .thenReturn(Optional.of(member));
+            }
 
+            @Test
+            @DisplayName("Member를 조회하여 적절한 ResDTO를 반환한다")
+            void find_member_success() {
                 // when
                 FoundMemberResDto result = foundMemberService.execute(memberId);
 
@@ -67,24 +73,28 @@ class Member_조회_Service_클래스의 {
             }
         }
 
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         @Nested
-        class 존재하지_않는_Member_ID가_주어졌을_때{
+        @DisplayName("존재하지 않는 Member ID가 주어졌을 때")
+        class when_member_id_does_not_exist {
 
-            @Test
-            @DisplayName("Member ID 찾을 수 없음 예외를 던진다")
-            void findMember_fail_whenMemberNotFound() {
-                // given
-                Long memberId = 999L;
+            @BeforeEach
+            void setUp() {
+                memberId = 999L;
 
                 when(memberRepository.findById(memberId))
                         .thenReturn(Optional.empty());
+            }
 
+            @Test
+            @DisplayName("Member ID 찾을 수 없음 예외를 던진다")
+            void find_member_fail_when_member_not_found() {
                 // when & then
                 assertThrows(RuntimeException.class,
                         () -> foundMemberService.execute(memberId));
+
                 verify(memberRepository).findById(memberId);
             }
         }
     }
 }
+
