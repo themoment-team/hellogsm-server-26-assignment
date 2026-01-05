@@ -50,7 +50,7 @@ public class CreateMemberServiceTest {
             }
 
             @Test
-            @DisplayName("DTO 객체의 정보에 따라 Member의 정보를 업데이트하여 save 한다.")
+            @DisplayName("DTO 객체의 정보에 따라 Member의 정보를 생성하여 save 한다.")
             void it_save_member() {
                 // when
                 createMemberService.execute(reqDto);
